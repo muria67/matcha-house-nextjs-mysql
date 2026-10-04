@@ -18,13 +18,21 @@ export default function Admin() {
       return;
     }
 
-    setU(JSON.parse(x));
+    try {
+      setU(JSON.parse(x));
+    } catch {
+      localStorage.removeItem("matcha_user");
+      location.href = "/login";
+      return;
+    }
 
     fetch(API + "/api/dashboard")
       .then((r) => r.json())
-      .then(setS)
-      .catch((err) => {
-        console.error("Gagal mengambil data dashboard:", err);
+      .then((data) => {
+        setS(data);
+      })
+      .catch((error) => {
+        console.error("Dashboard error:", error);
       });
   }, []);
 
